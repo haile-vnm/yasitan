@@ -89,3 +89,7 @@ class HttpRequest {
     return axios(requestConfig).then(res => res.data);
   }
 }
+
+export const apiService = new HttpRequest(
+  process.env.NEXT_PUBLIC_API_ENDPOINT!,
+);
