@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import { embedPageLayout } from '../_app';
-import { AuthLayout } from '@/components/layouts/auth';
+import { getLayout } from '@/components/layouts/auth';
 
 export default function SignIn() {
   return (
     <div>
-      Sign up
+      Sign In
       <Link href="./sign-up">Sign up</Link>
     </div>
   );
 }
 
-embedPageLayout(SignIn, AuthLayout);
+embedPageLayout(SignIn, getLayout);

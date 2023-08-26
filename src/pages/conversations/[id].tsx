@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import ConversationsLayout from '@/components/layouts/home/conversations';
+import { getLayout } from '@/components/layouts/home/conversations';
 import { embedPageLayout } from '../_app';
 
 export default function ConversationDetail() {
@@ -7,4 +7,4 @@ export default function ConversationDetail() {
   return <>Conversation Details at {router.query.id}</>;
 }
 
-embedPageLayout(ConversationDetail, ConversationsLayout);
+embedPageLayout(ConversationDetail, getLayout);

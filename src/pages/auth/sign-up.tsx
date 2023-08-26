@@ -1,6 +1,6 @@
 import { embedPageLayout } from '../_app';
 import Link from 'next/link';
-import { AuthLayout } from '@/components/layouts/auth';
+import { getLayout } from '@/components/layouts/auth';
 
 export default function SignUp() {
   return (
@@ -11,4 +11,4 @@ export default function SignUp() {
   );
 }
 
-embedPageLayout(SignUp, AuthLayout)
+embedPageLayout(SignUp, getLayout);

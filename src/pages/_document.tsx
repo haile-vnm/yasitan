@@ -1,6 +1,5 @@
-import { Html, Head, Main, NextScript } from 'next/document'
+import { Head, Html, Main, NextScript } from 'next/document';
 import type { Metadata } from 'next';
-
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,5 +15,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  )
+  );
 }
