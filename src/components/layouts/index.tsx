@@ -25,7 +25,7 @@ export default function RootLayout({
           .then(user => {
             setUser(profileDispatch, user);
           })
-          .catch()
+          .catch(() => {})
           .finally(() => resolve(undefined));
       } else {
         resolve(undefined);
