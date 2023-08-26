@@ -1,21 +1,22 @@
 import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
+import { ProfileProvider } from '@/contexts/profile';
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+type NextPageWithLayout<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
-
-export function embedPageLayout(
-  Component: NextPage,
-  Layout: ({ children }: { children: ReactNode }) => ReactElement
-) {
-  (Component as NextPageWithLayout).getLayout = (page: ReactElement) => <Layout>{page}</Layout>;
-}
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
+
+export function embedPageLayout(
+  Component: NextPage,
+  layoutWrapper: (page: ReactNode) => ReactElement,
+) {
+  (Component as NextPageWithLayout).getLayout = layoutWrapper;
+}
 
 export default function YasitanApp({
   Component,
@@ -24,7 +25,7 @@ export default function YasitanApp({
   // Fix hydration error
   // https://nextjs.org/docs/messages/react-hydration-error#solution-1-using-useeffect-to-run-on-the-client-only
   const [render, setRender] = useState(false);
-  useEffect(() => setRender(true), [])
+  useEffect(() => setRender(true), []);
 
   if (!render) {
     return null;
@@ -33,5 +34,7 @@ export default function YasitanApp({
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? (page => page);
 
-  return getLayout(<Component {...pageProps} />);
+  return (
+    <ProfileProvider>{getLayout(<Component {...pageProps} />)}</ProfileProvider>
+  );
 }
