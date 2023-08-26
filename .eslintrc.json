@@ -41,6 +41,15 @@
     "no-lonely-if": "error",
     "no-unneeded-ternary": "error",
     "one-var-declaration-per-line": "error",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn", // or "error"
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
     "quotes": [
       "error",
       "single",
