@@ -31,7 +31,7 @@ export default function ConversationDetail() {
 
     getConvoMessages(id as string)
       .then(messages => {
-        initMessages(convoMessagesDispatch, id, messages);
+        initMessages(convoMessagesDispatch, id, messages.reverse());
         setLoaded(true);
       })
       .catch(() => {
