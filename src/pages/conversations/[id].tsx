@@ -9,28 +9,30 @@ import { getConvoMessages } from '@/integrations/api/conversation';
 import {
   initMessages,
   useConversationMessagesDispatch,
+  useConversationMessagesState,
 } from '@/contexts/conversation-messages';
 
 export default function ConversationDetail() {
-  const [render, setRender] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const router = useRouter();
   const id = router.query.id as string;
   const convoMessagesDispatch = useConversationMessagesDispatch();
+  const { conversationId } = useConversationMessagesState();
 
   useEffect(() => {
-    if (render) {
-      setRender(false);
+    if (loaded) {
+      setLoaded(false);
     }
 
     if (id === 'new') {
-      setRender(true);
+      setLoaded(true);
       return;
     }
 
     getConvoMessages(id as string)
       .then(messages => {
         initMessages(convoMessagesDispatch, id, messages);
-        setRender(true);
+        setLoaded(true);
       })
       .catch(() => {
         router.push('/new');
@@ -38,10 +40,10 @@ export default function ConversationDetail() {
   }, [id]);
 
   return (
-    <If condition={render} else={<div>Loading conversation</div>}>
-      <div className="h-full flex flex-col justify-end">
+    <div className="h-full flex flex-col justify-end">
+      <If condition={loaded} else={<div>Loading conversation</div>}>
         <If
-          condition={id !== 'new'}
+          condition={conversationId}
           else={
             <div className="h-full flex justify-center items-center">
               Let&apos;s start asking whatever you want 🚀
@@ -52,11 +54,11 @@ export default function ConversationDetail() {
             <MessagesHistory></MessagesHistory>
           </div>
         </If>
-        <div className="w-full">
-          <Composer></Composer>
-        </div>
+      </If>
+      <div className="w-full">
+        <Composer></Composer>
       </div>
-    </If>
+    </div>
   );
 }
 

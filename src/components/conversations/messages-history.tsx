@@ -1,6 +1,6 @@
 import { useConversationMessagesState } from '@/contexts/conversation-messages';
 
 export default function MessagesHistory() {
-  const { conversationId } = useConversationMessagesState();
-  return <>Messages History at {conversationId}</>;
+  const { messages } = useConversationMessagesState();
+  return <div>{messages.map(msg => msg.content)}</div>;
 }

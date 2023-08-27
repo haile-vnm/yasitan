@@ -43,9 +43,12 @@ function reducer(
 ): ConversationMessagesState {
   switch (action.type) {
     case 'init': {
+      const { messages, conversationId } = (action as InitMessagesAction)
+        .payload!;
       return {
         ...state,
-        messages: (action as InitMessagesAction).payload?.messages || [],
+        conversationId,
+        messages: messages || state.messages || [],
       };
     }
 
