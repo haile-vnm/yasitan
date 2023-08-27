@@ -74,15 +74,13 @@ function reducer(
 
 interface ConversationMessagesProviderProps {
   children: React.ReactNode;
-  conversationId: string;
 }
 
 export function ConversationMessagesProvider({
   children,
-  conversationId,
 }: ConversationMessagesProviderProps) {
   const [state, dispatch] = useReducer(reducer, {
-    conversationId,
+    conversationId: '',
     messages: [],
   });
 
