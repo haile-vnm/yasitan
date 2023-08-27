@@ -1,7 +1,7 @@
 import { Textarea } from 'flowbite-react';
 import AppButton from '../shared/button';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import {
   addMessage,
   initMessages,
@@ -10,30 +10,27 @@ import {
   useConversationMessagesState,
 } from '@/contexts/conversation-messages';
 import { chat, createConversation } from '@/integrations/api/conversation';
+import { useProfileState } from '@/contexts/profile';
 
 export default function Composer() {
   const messageDispatch = useConversationMessagesDispatch();
   const { conversationId } = useConversationMessagesState();
+  const { user } = useProfileState();
+  const [content, setContent] = useState('');
 
   const submitMessage = (event: FormEvent) => {
     event.preventDefault();
-
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
-
-    let { content } = Object.fromEntries(formData.entries()) as {
-      content: string;
-    };
-    content = content.trim();
-
     // should use uuid instead
     const tempMessageId = Math.random() + '';
 
     addMessage(messageDispatch, {
-      content,
+      content: content.trim(),
       status: 'sending',
+      ownerId: user?._id,
       _id: tempMessageId,
     });
+
+    setContent('');
 
     const conversation = conversationId
       ? Promise.resolve(conversationId)
@@ -55,9 +52,11 @@ export default function Composer() {
         <Textarea
           className="pr-12 bg-gray-900 text-white"
           name="content"
+          onChange={value => setContent(value.target.value)}
           placeholder="Enter your message"
           required
           rows={4}
+          value={content}
         />
 
         <AppButton category={'white'} className="absolute right-2 bottom-2">
