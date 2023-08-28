@@ -20,17 +20,19 @@ export default function MessagesHistory() {
   }, []);
 
   return (
-    <div className="p-6 pb-0">
-      {messages.map(msg => (
-        <div
-          className={`p-4 m-3 rounded max-w-[80%] w-fit bg-gray-700 ${
-            msg.ownerId ? 'ml-auto text-end' : ''
-          }`}
-          key={msg._id}
-        >
-          {msg.content}
-        </div>
-      ))}
+    <div className="h-full flex">
+      <div className="p-6 pb-0 w-full self-end mt-auto">
+        {messages.map(msg => (
+          <div
+            className={`p-4 m-3 rounded max-w-[80%] w-fit bg-gray-700 ${
+              msg.ownerId ? 'ml-auto text-end' : ''
+            }`}
+            key={msg._id}
+          >
+            {msg.content}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
