@@ -50,12 +50,12 @@ export default function ConversationDetail() {
             </div>
           }
         >
-          <div className="w-full">
+          <div className="w-full overflow-auto h-full">
             <MessagesHistory></MessagesHistory>
           </div>
         </If>
       </If>
-      <div className="w-full">
+      <div className="w-full p-6">
         <Composer></Composer>
       </div>
     </div>
