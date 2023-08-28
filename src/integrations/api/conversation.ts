@@ -21,8 +21,8 @@ export const getConvoMessages = (convoId: string) =>
     .then(res => res.messages)
     .catch((err: AxiosError) => Promise.reject(err.response?.data));
 
-export const chat = (convoId: string, content: string) =>
+export const chat = (convoId: string, message: Partial<Message>) =>
   apiService
-    .post<{ message: Message }>(['conversations', convoId, 'chat'], { content })
+    .post<{ message: Message }>(['conversations', convoId, 'chat'], { message })
     .then(res => res.message)
     .catch((err: AxiosError) => Promise.reject(err.response?.data));

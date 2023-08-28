@@ -5,12 +5,12 @@ import { FormEvent, useState } from 'react';
 import {
   addMessage,
   initMessages,
-  updateMessage,
   useConversationMessagesDispatch,
   useConversationMessagesState,
 } from '@/contexts/conversation-messages';
 import { chat, createConversation } from '@/integrations/api/conversation';
 import { useProfileState } from '@/contexts/profile';
+import Message from '@/integrations/api/models/message';
 
 export default function Composer() {
   const messageDispatch = useConversationMessagesDispatch();
@@ -21,14 +21,15 @@ export default function Composer() {
   const submitMessage = (event: FormEvent) => {
     event.preventDefault();
     // should use uuid instead
-    const tempMessageId = Math.random() + '';
+    const secondaryId = Math.random() + '';
 
-    addMessage(messageDispatch, {
+    const message: Partial<Message> = {
       content: content.trim(),
-      status: 'sending',
       ownerId: user?._id,
-      _id: tempMessageId,
-    });
+      metadata: { secondaryId },
+    };
+
+    addMessage(messageDispatch, message);
 
     setContent('');
 
@@ -40,8 +41,8 @@ export default function Composer() {
         });
 
     conversation.then(conversationId => {
-      chat(conversationId, content).then(message => {
-        updateMessage(messageDispatch, tempMessageId, message);
+      chat(conversationId, message).then(message => {
+        addMessage(messageDispatch, message);
       });
     });
   };

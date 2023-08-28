@@ -3,7 +3,9 @@ export default interface Message {
   content: string;
   ownerId: string;
   convoId: string;
-  status: 'sending' | 'sent';
+  metadata?: {
+    secondaryId: string;
+  };
 
   createdAt: number;
   updatedAt: number;

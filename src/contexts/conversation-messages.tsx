@@ -2,6 +2,9 @@ import { createContext, Dispatch, useContext, useReducer } from 'react';
 import { Action } from './models';
 import Message from '@/integrations/api/models/message';
 
+const isSameMessage = (message: Partial<Message>, msg: Message) =>
+  message._id === msg._id ||
+  (!msg._id && msg.metadata?.secondaryId === message.metadata?.secondaryId);
 interface ConversationMessagesState {
   conversationId: string;
   messages: Message[];
@@ -18,14 +21,6 @@ type InitMessagesAction = Action<
 >;
 
 type AddMessageAction = Action<ActionType, { message: Partial<Message> }>;
-
-type UpdateMessageAction = Action<
-  ActionType,
-  {
-    id: string;
-    message: Partial<Message>;
-  }
->;
 
 const ConversationMessagesStateContext =
   createContext<ConversationMessagesState>({
@@ -53,19 +48,25 @@ function reducer(
     }
 
     case 'add': {
-      return {
-        ...state,
-        messages: state.messages.concat(action.payload!.message as Message),
-      };
-    }
+      const { message } = (action as AddMessageAction).payload!;
+      const messages: Message[] = [];
+      let foundMessage = false;
+      state.messages.forEach(msg => {
+        if (isSameMessage(message, msg)) {
+          foundMessage = true;
+          return messages.push({ ...msg, ...message });
+        }
 
-    case 'update': {
-      const { id, message } = (action as UpdateMessageAction).payload!;
+        return messages.push(msg);
+      });
+
+      if (!foundMessage) {
+        messages.push(message as Message);
+      }
+
       return {
         ...state,
-        messages: state.messages.map(msg =>
-          msg._id === id ? { ...msg, ...message } : msg,
-        ),
+        messages,
       };
     }
 
@@ -108,12 +109,6 @@ export const addMessage = (
   dispatch: Dispatch<AddMessageAction>,
   message: Partial<Message>,
 ) => dispatch({ type: 'add', payload: { message } });
-
-export const updateMessage = (
-  dispatch: Dispatch<UpdateMessageAction>,
-  id: string,
-  message: Partial<Message>,
-) => dispatch({ type: 'update', payload: { id, message } });
 
 export const initMessages = (
   dispatch: Dispatch<InitMessagesAction>,
