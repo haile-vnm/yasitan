@@ -1,8 +1,10 @@
 import { getField } from '@/lib/local-storage';
 import axios, { AxiosRequestConfig } from 'axios';
 
+export const getAppToken = () => `Bearer ${getField('access-token')}`;
+
 axios.interceptors.request.use(config => {
-  config.headers.authorization = `Bearer ${getField('access-token')}`;
+  config.headers.authorization = getAppToken();
 
   return config;
 });

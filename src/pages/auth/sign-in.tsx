@@ -24,7 +24,7 @@ export default function SignIn() {
           router.push('/');
         });
       })
-      .catch(err => setError(err.error));
+      .catch(err => setError(err?.error));
   };
 
   return (

@@ -1,14 +1,19 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import HomeLayout from '.';
 import ConversationList from '@/components/conversations/list';
 import RootLayout from '..';
 import { ConversationMessagesProvider } from '@/contexts/conversation-messages';
+import { connect } from '@/integrations/socket';
 
 export default function ConversationsLayout({
   children,
 }: {
   children: ReactNode;
 }) {
+  useEffect(() => {
+    connect();
+  }, []);
+
   return (
     <div className="flex flex-row min-h-screen">
       <aside className="sidebar w-64 md:shadow transform -translate-x-full md:translate-x-0 transition-transform bg-gray-900 duration-150 ease-in">
