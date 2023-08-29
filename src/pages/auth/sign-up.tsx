@@ -19,8 +19,10 @@ export default function SignUp() {
     signUp(email, password)
       .then(data => {
         setField('access-token', data.token);
-        getCurrentUser().then(user => setUser(profileDispatch, user));
-        router.push('/');
+        getCurrentUser().then(user => {
+          setUser(profileDispatch, user);
+          router.push('/');
+        });
       })
       .catch(err => setError(err.error));
   };
