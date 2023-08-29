@@ -7,8 +7,8 @@ export default function Page() {
   const { user } = useProfileState();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <h1>Welcome {user?.email}</h1>
+      <div className="mb-32 grid text-center">
+        <h1 className="mb-3">Welcome {user?.email}</h1>
         <h3>
           Let&apos;s explore the Yasitan!&nbsp;
           <Link
