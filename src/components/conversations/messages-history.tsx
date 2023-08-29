@@ -24,8 +24,8 @@ export default function MessagesHistory() {
       <div className="p-6 pb-0 w-full self-end mt-auto">
         {messages.map(msg => (
           <div
-            className={`p-4 m-3 rounded max-w-[80%] w-fit bg-gray-700 ${
-              msg.ownerId ? 'ml-auto text-end' : ''
+            className={`p-4 m-3 rounded max-w-[80%] w-fit bg-gray-700 whitespace-pre-line ${
+              msg.ownerId ? 'ml-auto' : ''
             }`}
             key={msg._id}
           >
