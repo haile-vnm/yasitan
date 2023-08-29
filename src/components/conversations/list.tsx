@@ -1,17 +1,19 @@
-import Conversation from '@/integrations/api/models/conversation';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import If from '../shared/if';
 import { getConversations } from '@/integrations/api/conversation';
 import AppButton from '../shared/button';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import {
   initMessages,
+  setConversations,
   useConversationMessagesDispatch,
+  useConversationMessagesState,
 } from '@/contexts/conversation-messages';
 
 export default function ConversationList() {
-  const [list, setList] = useState<Conversation[]>([]);
+  // const [conversations, setList] = useState<Conversation[]>([]);
+  const { conversations } = useConversationMessagesState();
   const conversationDispatch = useConversationMessagesDispatch();
 
   const newChat = () => {
@@ -19,7 +21,9 @@ export default function ConversationList() {
   };
 
   useEffect(() => {
-    getConversations().then(conversations => setList(conversations));
+    getConversations().then(conversations =>
+      setConversations(conversationDispatch, conversations),
+    );
   }, []);
 
   return (
@@ -28,12 +32,12 @@ export default function ConversationList() {
         <PlusIcon className="h-4 w-4"></PlusIcon>&nbsp;New Chat
       </AppButton>
       <ul className="list-inside list-none pt-3 pb-8 overflow-auto h-full">
-        <If condition={list} else={<>Loading Conversations</>}>
+        <If condition={conversations} else={<>Loading Conversations</>}>
           <If
-            condition={list?.length}
+            condition={conversations?.length}
             else={<>There is no conversation found</>}
           >
-            {list?.map(convo => (
+            {conversations?.map(convo => (
               <Link
                 className="p-3 hover:bg-gray-800 hover:rounded truncate block"
                 href={`/conversations/${convo._id}`}

@@ -1,6 +1,7 @@
 import { createContext, Dispatch, useContext, useReducer } from 'react';
 import { Action } from './models';
 import Message from '@/integrations/api/models/message';
+import Conversation from '@/integrations/api/models/conversation';
 
 const isSameMessage = (message: Partial<Message>, msg: Message) =>
   message._id === msg._id ||
@@ -8,9 +9,15 @@ const isSameMessage = (message: Partial<Message>, msg: Message) =>
 interface ConversationMessagesState {
   conversationId: string;
   messages: Message[];
+  conversations: Conversation[];
 }
 
-type ActionType = 'init' | 'add' | 'update';
+type ActionType =
+  | 'init'
+  | 'add'
+  | 'update'
+  | 'setConversations'
+  | 'addConversation';
 
 type InitMessagesAction = Action<
   ActionType,
@@ -22,10 +29,25 @@ type InitMessagesAction = Action<
 
 type AddMessageAction = Action<ActionType, { message: Partial<Message> }>;
 
+type SetConversationsAction = Action<
+  ActionType,
+  {
+    conversations: Conversation[];
+  }
+>;
+
+type AddConversationAction = Action<
+  ActionType,
+  {
+    conversation: Conversation;
+  }
+>;
+
 const ConversationMessagesStateContext =
   createContext<ConversationMessagesState>({
     conversationId: '',
     messages: [],
+    conversations: [],
   });
 
 const ConversationMessagesDispatchContext = createContext<
@@ -70,6 +92,24 @@ function reducer(
       };
     }
 
+    case 'setConversations': {
+      return {
+        ...state,
+        conversations: (action as SetConversationsAction).payload
+          ?.conversations,
+      };
+    }
+
+    case 'addConversation': {
+      return {
+        ...state,
+        conversations: [
+          (action as AddConversationAction).payload?.conversation,
+          ...state.conversations,
+        ],
+      };
+    }
+
     default: {
       throw Error('Unknown action: ' + action.type);
     }
@@ -86,6 +126,7 @@ export function ConversationMessagesProvider({
   const [state, dispatch] = useReducer(reducer, {
     conversationId: '',
     messages: [],
+    conversations: [],
   });
 
   return (
@@ -115,3 +156,13 @@ export const initMessages = (
   conversationId: string,
   messages?: Message[],
 ) => dispatch({ type: 'init', payload: { messages, conversationId } });
+
+export const setConversations = (
+  dispatch: Dispatch<SetConversationsAction>,
+  conversations: Conversation[],
+) => dispatch({ type: 'setConversations', payload: { conversations } });
+
+export const addConversation = (
+  dispatch: Dispatch<AddConversationAction>,
+  conversation: Conversation,
+) => dispatch({ type: 'addConversation', payload: { conversation } });

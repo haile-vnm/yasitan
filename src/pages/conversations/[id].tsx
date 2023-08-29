@@ -5,12 +5,20 @@ import If from '@/components/shared/if';
 import MessagesHistory from '@/components/conversations/messages-history';
 import Composer from '@/components/conversations/composer';
 import { useEffect, useState } from 'react';
-import { getConvoMessages } from '@/integrations/api/conversation';
 import {
+  chat,
+  createConversation,
+  getConvoMessages,
+} from '@/integrations/api/conversation';
+import {
+  addConversation,
+  addMessage,
   initMessages,
   useConversationMessagesDispatch,
   useConversationMessagesState,
 } from '@/contexts/conversation-messages';
+import Message from '@/integrations/api/models/message';
+import { useProfileState } from '@/contexts/profile';
 
 export default function ConversationDetail() {
   const [loaded, setLoaded] = useState(false);
@@ -18,6 +26,7 @@ export default function ConversationDetail() {
   const id = router.query.id as string;
   const convoMessagesDispatch = useConversationMessagesDispatch();
   const { conversationId } = useConversationMessagesState();
+  const { user } = useProfileState();
 
   useEffect(() => {
     if (loaded) {
@@ -39,6 +48,33 @@ export default function ConversationDetail() {
       });
   }, [id]);
 
+  const sendMessage = (content: string) => {
+    // should use uuid instead
+    const secondaryId = Math.random() + '';
+
+    const message: Partial<Message> = {
+      content: content.trim(),
+      ownerId: user?._id,
+      metadata: { secondaryId },
+    };
+
+    addMessage(convoMessagesDispatch, message);
+
+    const conversation = conversationId
+      ? Promise.resolve(conversationId)
+      : createConversation().then(conversation => {
+          initMessages(convoMessagesDispatch, conversation._id);
+          addConversation(convoMessagesDispatch, conversation);
+          return conversation._id;
+        });
+
+    conversation.then(conversationId => {
+      chat(conversationId, message).then(message => {
+        addMessage(convoMessagesDispatch, message);
+      });
+    });
+  };
+
   return (
     <div className="h-full flex flex-col justify-end">
       <If condition={loaded} else={<div>Loading conversation</div>}>
@@ -56,7 +92,7 @@ export default function ConversationDetail() {
         </If>
       </If>
       <div className="w-full p-6">
-        <Composer></Composer>
+        <Composer onSubmit={sendMessage}></Composer>
       </div>
     </div>
   );

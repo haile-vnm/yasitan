@@ -2,49 +2,16 @@ import { Textarea } from 'flowbite-react';
 import AppButton from '../shared/button';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid';
 import { FormEvent, useState } from 'react';
-import {
-  addMessage,
-  initMessages,
-  useConversationMessagesDispatch,
-  useConversationMessagesState,
-} from '@/contexts/conversation-messages';
-import { chat, createConversation } from '@/integrations/api/conversation';
-import { useProfileState } from '@/contexts/profile';
-import Message from '@/integrations/api/models/message';
-
-export default function Composer() {
-  const messageDispatch = useConversationMessagesDispatch();
-  const { conversationId } = useConversationMessagesState();
-  const { user } = useProfileState();
+interface ComposerProps {
+  onSubmit: (content: string) => void;
+}
+export default function Composer({ onSubmit }: ComposerProps) {
   const [content, setContent] = useState('');
 
   const submitMessage = (event: FormEvent) => {
     event.preventDefault();
-    // should use uuid instead
-    const secondaryId = Math.random() + '';
-
-    const message: Partial<Message> = {
-      content: content.trim(),
-      ownerId: user?._id,
-      metadata: { secondaryId },
-    };
-
-    addMessage(messageDispatch, message);
-
+    onSubmit(content);
     setContent('');
-
-    const conversation = conversationId
-      ? Promise.resolve(conversationId)
-      : createConversation().then(conversation => {
-          initMessages(messageDispatch, conversation._id);
-          return conversation._id;
-        });
-
-    conversation.then(conversationId => {
-      chat(conversationId, message).then(message => {
-        addMessage(messageDispatch, message);
-      });
-    });
   };
 
   return (
