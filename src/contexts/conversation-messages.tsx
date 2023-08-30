@@ -95,18 +95,32 @@ function reducer(
     case 'setConversations': {
       return {
         ...state,
-        conversations: (action as SetConversationsAction).payload
-          ?.conversations,
+        conversations: (action as SetConversationsAction).payload!
+          .conversations,
       };
     }
 
     case 'addConversation': {
+      const conversations = [];
+      const newConvo = (action as AddConversationAction).payload!.conversation;
+      let isExist = false;
+      state.conversations.forEach(convo => {
+        if (convo._id === newConvo._id) {
+          conversations.push({ ...convo, ...newConvo });
+          isExist = true;
+          return;
+        }
+
+        conversations.push(convo);
+      });
+
+      if (!isExist) {
+        conversations.unshift(newConvo);
+      }
+
       return {
         ...state,
-        conversations: [
-          (action as AddConversationAction).payload?.conversation,
-          ...state.conversations,
-        ],
+        conversations,
       };
     }
 

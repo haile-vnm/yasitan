@@ -5,11 +5,13 @@ import { getConversations } from '@/integrations/api/conversation';
 import AppButton from '../shared/button';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import {
+  addConversation,
   initMessages,
   setConversations,
   useConversationMessagesDispatch,
   useConversationMessagesState,
 } from '@/contexts/conversation-messages';
+import { onNewConversation } from '@/integrations/socket';
 
 export default function ConversationList() {
   // const [conversations, setList] = useState<Conversation[]>([]);
@@ -24,6 +26,10 @@ export default function ConversationList() {
     getConversations().then(conversations =>
       setConversations(conversationDispatch, conversations),
     );
+
+    onNewConversation(({ conversation }) => {
+      addConversation(conversationDispatch, conversation);
+    });
   }, []);
 
   return (
