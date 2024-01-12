@@ -1,4 +1,5 @@
-import '../../app/globals.css';
+// import '../../app/globals.css';
+
 import { setUser, useProfileDispatch } from '@/contexts/profile';
 import type { Metadata } from 'next';
 import { useEffect, useState } from 'react';

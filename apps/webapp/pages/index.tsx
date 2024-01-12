@@ -1,7 +1,8 @@
-import { getLayout } from '@/components/layouts/home';
+import styles from './index.module.scss';
 import { embedPageLayout } from './_app';
-import { useProfileState } from '@/contexts/profile';
 import Link from 'next/link';
+import { useProfileState } from '../contexts/profile';
+import { getLayout } from '../components/layouts/home';
 
 export default function Page() {
   const { user } = useProfileState();

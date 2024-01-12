@@ -1,7 +1,8 @@
+import './styles.css';
 import { ReactElement, ReactNode, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-import { ProfileProvider } from '@/contexts/profile';
+import { ProfileProvider } from '../contexts/profile';
 
 type NextPageWithLayout<P = unknown, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
