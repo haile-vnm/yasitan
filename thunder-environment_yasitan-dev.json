@@ -1,0 +1,16 @@
+{
+    "client": "Thunder Client",
+    "environmentName": "yasitan",
+    "dateExported": "2023-08-29T00:01:59.128Z",
+    "version": "1.0",
+    "variables": [
+        {
+            "name": "api-endpoint",
+            "value": "http://localhost:3100"
+        },
+        {
+            "name": "user-token",
+            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IlJNS1dCa0RJODBGQWJoTHRjc3RWRiIsImVtYWlsIjoiaGFpLmxlQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTMxMDI3MjAsImV4cCI6MTY5MzE4OTEyMCwiaXNzIjoieWFzaXRhbiIsInN1YiI6IlJNS1dCa0RJODBGQWJoTHRjc3RWRiJ9.f9sibN9Hd4qmhejoxcbAHuK7Gc_fX4o0D1zkYz2wRvM"
+        }
+    ]
+}

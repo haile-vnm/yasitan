@@ -1,0 +1,57 @@
+version: '3.1'
+
+services:
+  mongodb:
+    image: mongo:6
+    ports:
+      - '27417:27017'
+    volumes:
+      - ./mongodb:/data/db
+    networks:
+      - dev-network
+
+
+  api:
+    build:
+      context: ./api
+      dockerfile: ../server-ts.development.dockerfile
+    environment:
+      - PORT=3000
+      - JWT_ISSUER=${JWT_ISSUER}
+      - JWT_TOKEN_LIFETIME_SECONDS=${JWT_TOKEN_LIFETIME_SECONDS}
+      - JWT_SECRET=${JWT_SECRET}
+      - APP_MONGODB_URI=${APP_MONGODB_URI}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+    image: yasitan/api
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+    ports:
+      - '3100:3000'
+    command: yarn dev
+    depends_on:
+      - mongodb
+    networks:
+      - dev-network
+
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: ../server-ts.development.dockerfile
+    environment:
+      - PORT=3000
+
+    image: yasitan/webapp
+    volumes:
+      - ./webapp:/app
+      - /app/node_modules
+    ports:
+      - '3000:3000'
+    command: yarn dev
+    networks:
+      - dev-network
+
+networks:
+  dev-network:
+    driver: bridge
