@@ -18,6 +18,8 @@ export const signToken = (userData: JwtSigningData) =>
 export const verifyToken = (token: string) => new Promise((resolve, reject) => {
   jwt.verify(token, getEnv('JWT_SECRET'), (err, payload) => {
     if (err) {
+      console.log('❌ validating failed token:', token);
+
       return reject(err);
     }
     resolve((payload as JwtPayload).user as User);
