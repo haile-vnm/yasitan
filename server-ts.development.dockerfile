@@ -1,13 +1,9 @@
 FROM node:18-alpine
 LABEL name=um/server version=1.0.0
 
-RUN yarn global add nodemon typescript pnpm
+RUN yarn global add nodemon typescript pnpm nx
 
 WORKDIR /app
-
-COPY ./ ./
-
-# RUN yarn
 
 EXPOSE 3000
 

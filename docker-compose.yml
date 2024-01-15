@@ -18,8 +18,8 @@ services:
 
   api:
     build:
-      context: ./apps/backend
-      dockerfile: ../../server-ts.development.dockerfile
+      context: ./
+      dockerfile: ./server-ts.development.dockerfile
     environment:
       - PORT=3000
       - JWT_ISSUER=${JWT_ISSUER}
@@ -30,26 +30,23 @@ services:
 
     image: yasitan/api
     volumes:
-      - ./apps/backend:/app
-      - ./node_modules:/app/node_modules
+      - ./:/app
     ports:
-      - '3000:3000'
-    command: npm run start api
-    # command: nx serve backend
+      - '3100:3000'
+    command: nx serve backend
     depends_on:
-      # - nm
+      - nm
       - mongodb
 
   webapp:
     build:
-      context: ./apps/webapp
-      dockerfile: ../../server-ts.development.dockerfile
+      context: ./
+      dockerfile: ./server-ts.development.dockerfile
     image: yasitan/webapp
     volumes:
-      - ./webapp:/app
-      - ./node_modules:/app/node_modules
+      - ./:/app
     ports:
-      - '8080:3000'
+      - '4200:4200'
     command: nx serve webapp
-    # depends_on:
-      # - nm
+    depends_on:
+      - nm
