@@ -1,0 +1,11 @@
+{
+  "rest-client.environmentVariables": {
+    "$shared": {
+      "jsonContentType": "content-type: application/json"
+    },
+    "api.local": {
+      "host": "http://localhost:3100",
+      "user-token": "{{$dotenv .env USER_TOKEN}}"
+    },
+  }
+}

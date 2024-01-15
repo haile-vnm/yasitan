@@ -57,35 +57,18 @@ The database consists of the following collections:
 
 ## Installation
 
-### 1️⃣ Clone the devenv repository
+### 1️⃣ Clone the repository
 
 ```shell
-git clone git@github.com:haile-yasitan/devenv.git yasitan
+git clone git@github.com:haile-vnm/yasitan.git yasitan
 ```
 
-### 2️⃣ Download all related repositories
+### 2️⃣ Set up Environment
 
-Navigate to the `yasitan` folder created by the previous command.
+- Create a `.env` file from `.env.example`. (Modify the values in the `.env` file according to your preferences (not recommended, as values are set for test running)).
+- Create a `apps/webapp/.env.local` file from `apps/webapp/.env.local.sample`.
 
-```shell
-cd yasitan
-```
-
-Load all sub-repositories inside the `yasitan` repository using the following commands:
-
-```shell
-git submodule init
-git submodule update
-```
-
-All the required service code will be downloaded to the `yasitan` folder.
-
-### 3️⃣ Set up Environment
-
-- Create a `.env` file from `.env.example`.
-- Modify the values in the `.env` file according to your preferences (not recommended, as values are set for test running).
-
-### 4️⃣ Build and run Docker containers
+### 3️⃣ Build and run Docker containers
 
 ```shell
 docker compose up -d
@@ -93,19 +76,21 @@ docker compose up -d
 
 Running this command starts all required services.
 
-## Test the app 🚀
+## Test the Application
+### By using Web 🚀
 
 After successfully building the mentioned services, you can access the following endpoints:
 
 - Webapp Endpoint: [http://localhost:3000](http://localhost:3000)
 - API Endpoint: [http://localhost:3100](http://localhost:3100)
 
-### Import Endpoints
+### Using API
+- Install `Rest Client` vscode extension
+- Switch Rest Client env to `api.local`
+- Create .env file in the `.rest-client` folder, and replace your value for each variables
+- Open and click at any endpoint in the `.rest-client/api.http` file for testing the endpoint.
 
-Use the Thunder Client VS extension to import the following files:
-
-- Endpoints file: `./thunder-requests_yasitan.json`
-- Environment file: `./thunder-environment_yasitan-dev.json`
+For more detail how to use this extension, please follow its docs at [here](https://github.com/Huachao/vscode-restclient)
 
 Enjoy every moment! 💃🕺
 

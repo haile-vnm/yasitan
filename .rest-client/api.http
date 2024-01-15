@@ -1,0 +1,50 @@
+@conversationId = {{$dotenv CONVO_ID}}
+###
+
+# Register new user
+POST  {{host}}/auth/register
+{{jsonContentType}}
+Authorization: {{user-token}}
+
+{
+  "email": "hai@gmail.com",
+  "password": "111111"
+}
+###
+
+# Login
+POST  {{host}}/auth/sign-in
+{{jsonContentType}}
+
+{
+  "email": "hai@gmail.com",
+  "password": "111111"
+}
+###
+
+GET {{host}}/conversations
+Authorization: Bearer {{$dotenv USER_TOKEN}}
+{{jsonContentType}}
+###
+
+# Create conversation
+POST  {{host}}/conversations
+Authorization: Bearer {{$dotenv USER_TOKEN}}
+{{jsonContentType}}
+###
+
+# Get conversation messages
+GET  {{host}}/conversations/{{conversationId}}/messages
+{{jsonContentType}}
+Authorization: Bearer {{$dotenv USER_TOKEN}}
+###
+
+# Chat
+POST   {{host}}/conversations/{{conversationId}}/chat
+{{jsonContentType}}
+Authorization: Bearer {{$dotenv USER_TOKEN}}
+
+{
+  "content": "hi there"
+}
+###
