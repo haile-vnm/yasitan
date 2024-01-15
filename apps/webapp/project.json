@@ -20,6 +20,7 @@
     },
     "serve": {
       "executor": "@nx/next:server",
+      "port": 3000,
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "webapp:build",

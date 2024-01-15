@@ -1,20 +1,25 @@
 version: '3.1'
+name: yasitan
 
 services:
+  nm:
+    build:
+      context: ./
+      dockerfile: ./node-modules.dockerfile
+    volumes:
+      - ./node_modules:/app/node_modules
+
   mongodb:
     image: mongo:6
     ports:
       - '27417:27017'
     volumes:
       - ./mongodb:/data/db
-    networks:
-      - dev-network
-
 
   api:
     build:
-      context: ./api
-      dockerfile: ../server-ts.development.dockerfile
+      context: ./apps/backend
+      dockerfile: ../../server-ts.development.dockerfile
     environment:
       - PORT=3000
       - JWT_ISSUER=${JWT_ISSUER}
@@ -25,33 +30,26 @@ services:
 
     image: yasitan/api
     volumes:
-      - ./api:/app
-      - /app/node_modules
+      - ./apps/backend:/app
+      - ./node_modules:/app/node_modules
     ports:
-      - '3100:3000'
-    command: yarn dev
+      - '3000:3000'
+    command: npm run start api
+    # command: nx serve backend
     depends_on:
+      # - nm
       - mongodb
-    networks:
-      - dev-network
 
   webapp:
     build:
-      context: ./webapp
-      dockerfile: ../server-ts.development.dockerfile
-    environment:
-      - PORT=3000
-
+      context: ./apps/webapp
+      dockerfile: ../../server-ts.development.dockerfile
     image: yasitan/webapp
     volumes:
       - ./webapp:/app
-      - /app/node_modules
+      - ./node_modules:/app/node_modules
     ports:
-      - '3000:3000'
-    command: yarn dev
-    networks:
-      - dev-network
-
-networks:
-  dev-network:
-    driver: bridge
+      - '8080:3000'
+    command: nx serve webapp
+    # depends_on:
+      # - nm

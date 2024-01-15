@@ -38,6 +38,7 @@
     },
     "serve": {
       "executor": "@nx/js:node",
+      "port": 3000,
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "backend:build"
