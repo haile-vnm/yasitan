@@ -12,6 +12,19 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+
+  // Issue Ref: https://github.com/vercel/next.js/issues/36774#issuecomment-1211818610
+  swcMinify: true,
+  // except for webpack, other parts are left as generated
+  // @ts-ignore
+  webpack: (config, context) => {
+    config.watchOptions = {
+      poll: 1000,
+      aggregateTimeout: 300
+    }
+    return config
+  }
+
 };
 
 const plugins = [
