@@ -1,15 +1,7 @@
-version: '3.1'
+version: '3'
 name: yasitan
 
 services:
-  nm:
-    build:
-      context: ./
-      dockerfile: ./node-modules.dockerfile
-    command: pnpm i
-    volumes:
-      - ./node_modules:/app/node_modules
-
   mongodb:
     image: mongo:6
     ports:
@@ -18,9 +10,9 @@ services:
       - ./mongodb:/data/db
 
   api:
-    build:
-      context: ./
-      dockerfile: ./server-ts.development.dockerfile
+    extends:
+      file: docker-compose.base.yml
+      service: nx-app-base
     environment:
       - PORT=3000
       - JWT_ISSUER=${JWT_ISSUER}
@@ -30,27 +22,20 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
 
     image: yasitan/api
-    volumes:
-      - ./:/app
     ports:
       - '3100:3000'
     command: nx serve backend
     depends_on:
-      nm:
-        condition: service_completed_successfully
-      mongodb:
-        condition: service_started
+      - mongodb
 
   webapp:
-    build:
-      context: ./
-      dockerfile: ./server-ts.development.dockerfile
+    extends:
+      file: docker-compose.base.yml
+      service: nx-app-base
     image: yasitan/webapp
-    volumes:
-      - ./:/app
     ports:
       - '4200:4200'
     command: nx serve webapp
-    depends_on:
-      nm:
-        condition: service_completed_successfully
+
+volumes:
+  root-node_modules: null
