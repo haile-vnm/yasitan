@@ -6,6 +6,7 @@ services:
     build:
       context: ./
       dockerfile: ./node-modules.dockerfile
+    command: pnpm i
     volumes:
       - ./node_modules:/app/node_modules
 
@@ -35,8 +36,10 @@ services:
       - '3100:3000'
     command: nx serve backend
     depends_on:
-      - nm
-      - mongodb
+      nm:
+        condition: service_completed_successfully
+      mongodb:
+        condition: service_started
 
   webapp:
     build:
@@ -49,4 +52,5 @@ services:
       - '4200:4200'
     command: nx serve webapp
     depends_on:
-      - nm
+      nm:
+        condition: service_completed_successfully

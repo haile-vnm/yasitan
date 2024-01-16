@@ -1,7 +1,7 @@
 FROM node:18-alpine
 LABEL name=um/server version=1.0.0
 
-RUN yarn global add nx
+RUN yarn global add nx pnpm
 
 WORKDIR /app
 
